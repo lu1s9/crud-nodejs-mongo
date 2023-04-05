@@ -1,0 +1,32 @@
+version: "3.9"
+
+services:
+  web:
+    build: .
+    depends_on:
+      monguito:
+        condition: service_healthy
+    ports:
+      - 3002:3000
+    environment:
+      - DB_HOST=monguito
+      - DB_USER=root
+      - DB_PASSWORD=monguito
+      - DB_PORT=27017
+      - DB_DATABASE=tasksDB
+      - PORT=3000
+    links:
+      - monguito
+  monguito:
+    healthcheck:
+      test: "mongosh"
+      interval: 20s
+      timeout: 10s
+      retries: 3
+      start_period: 20s
+    image: mongo:latest
+    ports:
+      - 27017:27017
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=root
+      - MONGO_INITDB_ROOT_PASSWORD=monguito
