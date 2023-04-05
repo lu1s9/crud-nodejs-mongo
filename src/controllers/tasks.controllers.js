@@ -3,9 +3,12 @@ import Task from "../models/Task.js";
 export const renderTasks = async (req, res) => {
   try {
     const tasks = await Task.find().lean();
+    const { error } = req.query;
+    if (error) {
+      return res.render("index", { tasks, error });
+    }
     res.render("index", { tasks });
   } catch (error) {
-    console.log(error);
     res.sendStatus(404);
   }
 };
@@ -22,6 +25,11 @@ export const renderTaskEdit = async (req, res) => {
 export const createTask = async (req, res) => {
   try {
     const { title, description } = req.body;
+    const check = await Task.findOne({ title });
+    if (check) {
+      return res.redirect("/?error=" + "Task already exist");
+    }
+
     const task = new Task({ title, description });
     await task.save();
     res.redirect("/");

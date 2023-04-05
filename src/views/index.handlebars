@@ -8,4 +8,9 @@
       {{> tasks/taskTable}}
     </div>
   </div>
+
+{{#if error}}
+<p class="alert alert-info">{{error}}</p>
+
+{{/if}}
 </div>
