@@ -1,0 +1,9 @@
+<h1>Update Task</h1>
+
+<form action="/{{task._id}}/update" method="post">
+  <label for="title">Task: </label>
+  <input type="text" name="title" id="title" value="{{task.title}}" />
+  <label for="description">Description: </label>
+  <textarea name="description" id="description">{{task.description}}</textarea>
+  <input type="submit" value="Update" />
+</form>
