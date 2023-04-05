@@ -9,7 +9,7 @@ import { engine } from "express-handlebars";
 const app = express();
 
 app.use(express.urlencoded({ extended: false }));
-app.use("/public", express.static(path.join(__dirname, "public")));
+app.use(express.static(path.join(__dirname, "public")));
 app.engine("handlebars", engine());
 app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "handlebars");

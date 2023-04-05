@@ -1,30 +1,38 @@
-<table>
-  <thead>
-    <tr>
-      <th>No.</th>
-      <th>Title</th>
-      <th>Description</th>
-      <th>Actions</th>
-    </tr>
-  </thead>
-  <tbody>
-    {{#each tasks}}
+{{#if tasks}}
+  <table class="table table-bordered table-dark">
+    <thead>
       <tr>
-        <td>{{@index}}</td>
-        <td>{{title}}</td>
-        <td>{{description}}</td>
-        <td>
-          <a href="/{{_id}}/toggleDone">
-            {{#if done}}
-              Undone
-            {{else}}
-              Done
-            {{/if}}
-          </a>
-          <a href="/{{_id}}/update">Update</a>
-          <a href="/{{_id}}/delete">Delete</a>
-        </td>
+        <th>No.</th>
+        <th>Title</th>
+        <th>Description</th>
+        <th>Actions</th>
       </tr>
-    {{/each}}
-  </tbody>
-</table>
+    </thead>
+    <tbody>
+      {{#each tasks}}
+        <tr>
+          <td>{{@index}}</td>
+          <td>{{title}}</td>
+          <td>{{description}}</td>
+          <td>
+            {{#if done}}
+              <a
+                href="/{{_id}}/toggleDone"
+                class="btn btn-secondary btn-sm"
+              >Undone</a>
+            {{else}}
+              <a
+                href="/{{_id}}/toggleDone"
+                class="btn btn-success btn-sm"
+              >Done</a>
+            {{/if}}
+            <a href="/{{_id}}/update" class="btn btn-warning btn-sm">Update</a>
+            <a href="/{{_id}}/delete" class="btn btn-danger btn-sm">Delete</a>
+          </td>
+        </tr>
+      {{/each}}
+    </tbody>
+  </table>
+{{else}}
+  <h2 class="text-center text-white">Without Tasks :(</h2>
+{{/if}}
