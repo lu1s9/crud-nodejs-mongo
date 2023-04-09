@@ -5,6 +5,8 @@ import taskRoutes from "./routes/index.routes.js";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 import { engine } from "express-handlebars";
+import notFound from "./middleware/notFound.js";
+import errorHandler from "./middleware/errorHandler.js";
 
 const app = express();
 
@@ -16,8 +18,7 @@ app.set("view engine", "handlebars");
 
 app.use("/", taskRoutes);
 
-app.use((req, res, next) => {
-  res.status(404).send("Pagina no encontrada");
-});
+app.use(notFound);
+app.use(errorHandler);
 
 export default app;
