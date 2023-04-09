@@ -15,7 +15,6 @@ services:
       - DB_PORT=27017
       - DB_DATABASE=tasksDB
       - PORT=3000
-      - NODE_ENV=production
     links:
       - monguito
   monguito:
