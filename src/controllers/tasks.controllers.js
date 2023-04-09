@@ -1,75 +1,48 @@
 import Task from "../models/Task.js";
+import AppError from "../utils/appError.js";
 
 export const renderTasks = async (req, res) => {
-  try {
-    const tasks = await Task.find().lean();
-    const { error } = req.query;
-    if (error) {
-      return res.render("index", { tasks, error });
-    }
-    res.render("index", { tasks });
-  } catch (error) {
-    res.sendStatus(404);
-  }
-};
-
-export const renderTaskEdit = async (req, res) => {
-  try {
-    const task = await Task.findById(req.params.id).lean();
-    res.render("updateTask", { task });
-  } catch (error) {
-    console.log(error);
-  }
+  const tasks = await Task.find().lean();
+  res.render("index", { tasks });
 };
 
 export const createTask = async (req, res) => {
-  try {
-    const { title, description } = req.body;
-    const check = await Task.findOne({ title });
-    if (check) {
-      return res.redirect("/?error=" + "Task already exist");
-    }
+  const check = await Task.findOne({ title: req.body.title });
+  if (check)
+    throw new AppError(
+      "Can't create. Task already exists",
+      "TASK_ALREADY_EXISTS"
+    );
+  const task = new Task(req.body);
+  await task.save();
+  res.redirect("/");
+};
 
-    const task = new Task({ title, description });
-    await task.save();
-    res.redirect("/");
-  } catch (error) {
-    console.log(error);
-  }
+export const renderTaskEdit = async (req, res) => {
+  const task = await Task.findById(req.params.id).lean();
+  console.log(req.params.id);
+  res.render("updateTask", { task });
 };
 
 export const updateTask = async (req, res) => {
-  try {
-    const { id } = req.params;
-    const { title, description } = req.body;
-    const task = await Task.findById(id);
-    task.title = title;
-    task.description = description;
-    await task.save();
-    res.redirect("/");
-  } catch (error) {
-    console.log(error);
-  }
+  const check = await Task.findOne({ title: req.body.title });
+  if (check)
+    throw new AppError(
+      "Can't update. Task already exists",
+      "TASK_ALREADY_EXISTS_UPDATE"
+    );
+  await Task.findByIdAndUpdate(req.params.id, req.body);
+  res.redirect("/");
 };
 
 export const deleteTask = async (req, res) => {
-  try {
-    const { id } = req.params;
-    await Task.findByIdAndDelete(id);
-    res.redirect("/");
-  } catch (error) {
-    console.log(error);
-  }
+  await Task.findByIdAndDelete(req.params.id);
+  res.redirect("/");
 };
 
 export const taskToggleDone = async (req, res) => {
-  try {
-    const { id } = req.params;
-    const task = await Task.findById(id);
-    task.done = !task.done;
-    await task.save();
-    res.redirect("/");
-  } catch (error) {
-    console.log(errro);
-  }
+  const task = await Task.findById(req.params.id);
+  task.done = !task.done;
+  await task.save();
+  res.redirect("/");
 };

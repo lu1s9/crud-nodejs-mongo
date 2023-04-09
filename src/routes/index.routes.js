@@ -10,14 +10,15 @@ import {
 
 import validation from "../middleware/validationMiddleware.js";
 import taskSchema from "../validators/taskValidator.js";
+import tryCatch from "../utils/tryCatch.js";
 
 const router = Router();
 
-router.get("/", renderTasks);
-router.get("/:id/update", renderTaskEdit);
-router.post("/add", validation(taskSchema), createTask);
-router.post("/:id/update", validation(taskSchema), updateTask);
-router.get("/:id/delete", deleteTask);
-router.get("/:id/toggleDone", taskToggleDone);
+router.post("/add", validation(taskSchema), tryCatch(createTask));
+router.get("/", tryCatch(renderTasks));
+router.get("/:id/update", tryCatch(renderTaskEdit));
+router.post("/:id/update", validation(taskSchema), tryCatch(updateTask));
+router.get("/:id/delete", tryCatch(deleteTask));
+router.get("/:id/toggleDone", tryCatch(taskToggleDone));
 
 export default router;
