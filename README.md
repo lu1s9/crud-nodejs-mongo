@@ -34,7 +34,7 @@ cd crud-nodejs-mongo
 2. Start up the application stack using the following command.
 
 ```shell
-docker compose up -d
+docker compose -f docker-compose.yml -f docker-compose.prod.yml up -d
 ```
 
 ### Test the application
